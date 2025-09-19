@@ -7,6 +7,7 @@ import jwt
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
 import logging
+from collections import deque
 
 # =============================================
 # CONFIGURACIÓN
@@ -44,18 +45,25 @@ class Empleo:
             "ubicacion": self.ubicacion
         }
 
-class Pila:
+class Cola:
+    """Cola FIFO simple respaldada por collections.deque
+
+    Métodos:
+    - encolar(item): añade al final
+    - desencolar(): saca del frente (None si vacía)
+    - esta_vacia(): True si no hay elementos
+    """
     def __init__(self):
-        self.items = []
-    
-    def push(self, item):
+        self.items = deque()
+
+    def encolar(self, item):
         self.items.append(item)
-    
-    def pop(self):
+
+    def desencolar(self):
         if not self.esta_vacia():
-            return self.items.pop()
+            return self.items.popleft()
         return None
-    
+
     def esta_vacia(self):
         return len(self.items) == 0
 
@@ -271,14 +279,14 @@ def get_trabajos():
         # Ordenar por score
         empleos_con_score.sort(key=lambda x: x["score_compatibilidad"], reverse=True)
         
-        # Usar pila para respuesta
-        pila = Pila()
-        for empleo_dict in reversed(empleos_con_score):
-            pila.push(empleo_dict)
+        # Usar Cola FIFO para respuesta: encolar en orden descendente (mayor->menor)
+        cola = Cola()
+        for empleo_dict in empleos_con_score:
+            cola.encolar(empleo_dict)
 
         trabajos = []
-        while not pila.esta_vacia():
-            trabajos.append(pila.pop())
+        while not cola.esta_vacia():
+            trabajos.append(cola.desencolar())
 
         return jsonify({
             "trabajos": trabajos,
