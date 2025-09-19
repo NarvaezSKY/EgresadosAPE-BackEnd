@@ -2,11 +2,15 @@
 Configuración de la aplicación Flask
 """
 import os
-from dotenv import load_dotenv
 
 # Cargar variables de entorno solo si no estamos en Vercel
-if not os.getenv('VERCEL'):
-    load_dotenv()
+try:
+    if not os.getenv('VERCEL'):
+        from dotenv import load_dotenv
+        load_dotenv()
+except ImportError:
+    # dotenv no está disponible, usar solo variables de entorno del sistema
+    pass
 
 class Config:
     """Configuración base de la aplicación"""

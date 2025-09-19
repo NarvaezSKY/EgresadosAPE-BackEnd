@@ -3,20 +3,20 @@
   "name": "pilapeback-api",
   "builds": [
     {
-      "src": "main_refactorizado.py",
+      "src": "api.py",
       "use": "@vercel/python"
     }
   ],
   "env": {
+    "VERCEL": "1",
     "FLASK_ENV": "production",
-    "FLASK_APP": "main_refactorizado.py",
     "DEBUG": "False"
   },
   "regions": ["iad1"],
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/main_refactorizado.py"
+      "destination": "/api.py"
     }
   ]
 }
