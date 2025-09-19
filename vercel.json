@@ -7,12 +7,6 @@
       "use": "@vercel/python"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "main_refactorizado.py"
-    }
-  ],
   "env": {
     "FLASK_ENV": "production",
     "FLASK_APP": "main_refactorizado.py",
@@ -21,8 +15,8 @@
   "regions": ["iad1"],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/$1"
+      "source": "/(.*)",
+      "destination": "/main_refactorizado.py"
     }
   ]
 }
