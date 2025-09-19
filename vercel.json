@@ -1,22 +1,15 @@
 {
   "version": 2,
-  "name": "pilapeback-api",
   "builds": [
     {
-      "src": "api.py",
+      "src": "index.py",
       "use": "@vercel/python"
     }
   ],
-  "env": {
-    "VERCEL": "1",
-    "FLASK_ENV": "production",
-    "DEBUG": "False"
-  },
-  "regions": ["iad1"],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/api.py"
+      "src": "/(.*)",
+      "dest": "index.py"
     }
   ]
 }
