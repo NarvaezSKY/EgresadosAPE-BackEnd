@@ -6,6 +6,7 @@ import os
 import jwt
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
+import logging
 
 # =============================================
 # CONFIGURACIÓN
@@ -227,6 +228,39 @@ def login():
         
     except Exception as e:
         return jsonify({"msg": "Error interno del servidor", "error": str(e)}), 500
+
+
+# Debug endpoint para verificar datos cargados en este entrypoint (útil en Vercel)
+@app.route('/debug-data', methods=['GET'])
+def debug_data_index():
+    try:
+        egresados_sample = [
+            {
+                'cedula': e.cedula,
+                'ficha': e.ficha,
+                'nombre': e.nombre,
+                'red': e.red,
+            }
+            for e in egresados_data[:5]
+        ]
+        empleos_sample = [
+            {
+                'titulo': emp.titulo,
+                'perfil_requerido': emp.perfil_requerido,
+            }
+            for emp in empleos_data[:5]
+        ]
+        logging.warning(f"[index.py] Egresados sample: {egresados_sample}")
+        logging.warning(f"[index.py] Empleos sample: {empleos_sample}")
+        return jsonify({
+            'egresados_sample': egresados_sample,
+            'empleos_sample': empleos_sample,
+            'egresados_count': len(egresados_data),
+            'empleos_count': len(empleos_data)
+        })
+    except Exception as e:
+        logging.exception('Error generando debug-data')
+        return jsonify({'msg': 'Error interno generando debug-data', 'error': str(e)}), 500
 
 @app.route("/trabajos", methods=["GET"])
 def get_trabajos():
