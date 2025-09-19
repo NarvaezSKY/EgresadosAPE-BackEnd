@@ -7,6 +7,9 @@ from app import create_app
 # Crear la aplicación usando el factory pattern
 app = create_app()
 
+# Para Vercel: asegurarse de que la app esté disponible
+application = app
+
 if __name__ == "__main__":
     # Obtener configuración del entorno
     host = os.getenv('HOST', '127.0.0.1')

@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "name": "pilapeback-api",
+  "builds": [
+    {
+      "src": "main_refactorizado.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "main_refactorizado.py"
+    }
+  ],
+  "env": {
+    "FLASK_ENV": "production",
+    "FLASK_APP": "main_refactorizado.py",
+    "DEBUG": "False"
+  },
+  "functions": {
+    "main_refactorizado.py": {
+      "maxDuration": 10
+    }
+  },
+  "regions": ["iad1"],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/$1"
+    }
+  ]
+}

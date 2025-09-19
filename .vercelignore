@@ -1,0 +1,40 @@
+# Archivos del entorno virtual
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
+
+# Archivos de desarrollo
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.log
+
+# Archivos de configuración local
+.env
+.env.local
+.env.development
+.env.test
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Documentación local
+README.md
+
+# Archivos temporales
+*.tmp
+*.temp
