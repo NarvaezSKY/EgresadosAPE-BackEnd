@@ -60,34 +60,10 @@ class Pila:
         return len(self.items) == 0
 
 # =============================================
-# BASE DE DATOS SIMULADA
+# BASE DE DATOS (usar `app.models` como fuente única)
 # =============================================
-egresados_data = [
-    Egresado("1001", "Juan Software", "F001", "Software", "Desarrollador especializado en aplicaciones web modernas con experiencia en Python, JavaScript y frameworks como React y Flask."),
-    Egresado("1002", "María Salud", "F002", "Salud", "Profesional de la salud especializada en atención al paciente, primeros auxilios y procedimientos médicos básicos."),
-    Egresado("1003", "Carlos Agricultura", "F003", "Agrícola", "Técnico agrícola con conocimientos en cultivos, manejo de suelos, irrigación y tecnologías agroindustriales modernas."),
-    Egresado("1004", "Ana Construcción", "F004", "Construcción", "Especialista en construcción con experiencia en lectura de planos, supervisión de obras y manejo de materiales de construcción."),
-    Egresado("1005", "Luis Mecánica", "F005", "Mecánica Industrial", "Técnico en mecánica industrial especializado en mantenimiento de maquinaria, soldadura y reparación de equipos industriales."),
-]
-
-empleos_data = [
-    # Software (15 empleos)
-    Empleo(1, "Desarrollador Frontend", "Desarrollo de interfaces web responsivas usando React, JavaScript y CSS moderno.", "Software", "$2,500,000", "Bogotá"),
-    Empleo(2, "Programador Python", "Desarrollo backend con Python, Flask/Django y bases de datos.", "Software", "$2,800,000", "Medellín"),
-    Empleo(3, "Desarrollador Full Stack", "Desarrollo completo de aplicaciones web con tecnologías modernas.", "Software", "$3,200,000", "Cali"),
-    
-    # Salud (10 empleos)
-    Empleo(51, "Auxiliar de Enfermería", "Apoyo en procedimientos médicos y atención al paciente en hospital.", "Salud", "$1,800,000", "Bogotá"),
-    Empleo(52, "Técnico en Primeros Auxilios", "Atención de emergencias médicas y primeros auxilios en empresa.", "Salud", "$2,000,000", "Medellín"),
-    
-    # Agricultura (8 empleos)
-    Empleo(81, "Técnico Agrícola", "Manejo de cultivos, supervisión de siembras y control de plagas.", "Agrícola", "$1,600,000", "Valle del Cauca"),
-    Empleo(82, "Supervisor de Campo", "Coordinación de labores agrícolas y manejo de personal de campo.", "Agrícola", "$2,200,000", "Cundinamarca"),
-    
-    # Mecánica Industrial (12 empleos)
-    Empleo(121, "Técnico en Mantenimiento", "Mantenimiento preventivo y correctivo de maquinaria industrial.", "Mecánica Industrial", "$2,400,000", "Bogotá"),
-    Empleo(122, "Soldador Industrial", "Soldadura de estructuras metálicas y reparación de equipos.", "Mecánica Industrial", "$2,100,000", "Barranquilla"),
-]
+# Importar los datos desde `app.models` para evitar duplicidad entre entrypoints
+from app.models import egresados_data, empleos_data
 
 # =============================================
 # FUNCIONES DE AUTENTICACIÓN
