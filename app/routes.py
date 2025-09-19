@@ -1,3 +1,23 @@
+# Ruta de debug para ver egresados y empleos registrados
+from flask import Blueprint, jsonify
+import logging
+from .models import egresados_data, empleos_data
+
+debug_bp = Blueprint('debug', __name__)
+
+@debug_bp.route('/debug-data')
+def debug_data():
+    # Limitar la cantidad de datos para evitar sobrecarga
+    egresados_sample = [e.to_dict() for e in egresados_data[:5]]
+    empleos_sample = [e.to_dict() for e in empleos_data[:5]]
+    logging.warning(f"Egresados sample: {egresados_sample}")
+    logging.warning(f"Empleos sample: {empleos_sample}")
+    return jsonify({
+        "egresados_sample": egresados_sample,
+        "empleos_sample": empleos_sample,
+        "egresados_count": len(egresados_data),
+        "empleos_count": len(empleos_data)
+    })
 """
 Rutas y endpoints de la API
 """
@@ -7,6 +27,8 @@ from .models import egresados_data, empleos_data, Pila
 
 
 def init_routes(app):
+    # Registrar blueprint de debug para exponer /debug-data
+    app.register_blueprint(debug_bp)
     """
     Inicializa todas las rutas de la aplicación
     
