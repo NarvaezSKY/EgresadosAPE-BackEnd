@@ -18,11 +18,6 @@
     "FLASK_APP": "main_refactorizado.py",
     "DEBUG": "False"
   },
-  "functions": {
-    "main_refactorizado.py": {
-      "maxDuration": 10
-    }
-  },
   "regions": ["iad1"],
   "rewrites": [
     {
