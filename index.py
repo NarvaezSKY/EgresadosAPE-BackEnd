@@ -57,9 +57,14 @@ class Cola:
         self.items = deque()
 
     def encolar(self, item):
+        # Añade el item al final de la cola (operación O(1)).
+        # Si encolamos en orden descendente por score, el frente
+        # contendrá siempre el empleo con mayor score.
         self.items.append(item)
 
     def desencolar(self):
+        # Quita y devuelve el elemento del frente (primer en entrar).
+        # Devuelve None si la cola está vacía.
         if not self.esta_vacia():
             return self.items.popleft()
         return None
@@ -127,11 +132,13 @@ def calcular_score_por_palabras_clave(egresado, empleo):
         palabras_tecnicas_encontradas = palabras_filtradas.intersection(palabras_tecnicas)
         return palabras_tecnicas_encontradas if palabras_tecnicas_encontradas else palabras_filtradas
     
+    # score acumulado (0-100)
     score = 0
     red_lower = egresado.red.lower()
     empleo_perfil_lower = empleo.perfil_requerido.lower()
     
-    # Match exacto = 100 puntos
+    # Match exacto = 100 puntos (cuando la 'red' del egresado coincide
+    # exactamente con el 'perfil_requerido' del empleo)
     if red_lower == empleo_perfil_lower:
         score = 100
     else:
@@ -143,14 +150,21 @@ def calcular_score_por_palabras_clave(egresado, empleo):
         
         palabras_egresado_todas = palabras_red_egresado.union(palabras_perfil_egresado)
         
-        if palabras_egresado_todas:
+    # Solo calculamos pesos si el egresado tiene palabras relevantes
+    if palabras_egresado_todas:
             # Scoring con pesos
+            # Coincidencias entre la 'red' del egresado y el perfil requerido
+            # reciben peso alto (40 puntos por coincidencia)
             coincidencias_red = len(palabras_red_egresado.intersection(palabras_empleo_perfil))
             score += coincidencias_red * 40
             
+            # Coincidencias entre el perfil del egresado y el perfil requerido
+            # tienen peso intermedio (30 puntos por coincidencia)
             coincidencias_perfil_req = len(palabras_perfil_egresado.intersection(palabras_empleo_perfil))
             score += coincidencias_perfil_req * 30
             
+            # Coincidencias entre el perfil del egresado y el título del empleo
+            # tienen peso menor (20 puntos por coincidencia)
             coincidencias_titulo = len(palabras_perfil_egresado.intersection(palabras_titulo))
             score += coincidencias_titulo * 20
     
@@ -268,23 +282,29 @@ def get_trabajos():
 
         # Calcular scores
         empleos_con_score = []
+        # Recorremos todos los empleos y calculamos su score para este egresado.
+        # Solo añadimos a la lista los empleos con score > 0 (alguna compatibilidad).
         for empleo in empleos_data:
             score = calcular_score_por_palabras_clave(egresado, empleo)
-            
             if score > 0:
                 empleo_dict = empleo.to_dict()
                 empleo_dict["score_compatibilidad"] = score
                 empleos_con_score.append(empleo_dict)
 
-        # Ordenar por score
+        # Ordenar por score (mayor -> menor). El empleo con mayor score queda
+        # en la posición 0 de la lista.
         empleos_con_score.sort(key=lambda x: x["score_compatibilidad"], reverse=True)
-        
-        # Usar Cola FIFO para respuesta: encolar en orden descendente (mayor->menor)
+
+        # Usar Cola FIFO para respuesta: encolamos en orden descendente
+        # (mayor->menor) para que, al desencolar FIFO, el primer elemento
+        # devuelto sea el de mayor score.
         cola = Cola()
         for empleo_dict in empleos_con_score:
             cola.encolar(empleo_dict)
 
         trabajos = []
+        # Desencolamos hasta vaciar la cola; popleft() devuelve primero el
+        # elemento que entró (empleo con mayor score)
         while not cola.esta_vacia():
             trabajos.append(cola.desencolar())
 
