@@ -140,16 +140,17 @@ def calcular_score_por_palabras_clave(egresado, empleo):
     # Match exacto = 100 puntos (cuando la 'red' del egresado coincide
     # exactamente con el 'perfil_requerido' del empleo)
     if red_lower == empleo_perfil_lower:
-        score = 100
-    else:
-        # Calcular compatibilidad por palabras
-        palabras_red_egresado = filtrar_palabras_relevantes(egresado.red)
-        palabras_perfil_egresado = filtrar_palabras_relevantes(egresado.perfil)
-        palabras_empleo_perfil = filtrar_palabras_relevantes(empleo.perfil_requerido)
-        palabras_titulo = filtrar_palabras_relevantes(empleo.titulo)
-        
-        palabras_egresado_todas = palabras_red_egresado.union(palabras_perfil_egresado)
-        
+        # Retornamos inmediatamente el score máximo cuando hay coincidencia exacta.
+        return 100
+
+    # Calcular compatibilidad por palabras
+    palabras_red_egresado = filtrar_palabras_relevantes(egresado.red)
+    palabras_perfil_egresado = filtrar_palabras_relevantes(egresado.perfil)
+    palabras_empleo_perfil = filtrar_palabras_relevantes(empleo.perfil_requerido)
+    palabras_titulo = filtrar_palabras_relevantes(empleo.titulo)
+
+    palabras_egresado_todas = palabras_red_egresado.union(palabras_perfil_egresado)
+
     # Solo calculamos pesos si el egresado tiene palabras relevantes
     if palabras_egresado_todas:
             # Scoring con pesos
